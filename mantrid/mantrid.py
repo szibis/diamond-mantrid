@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """
-Shells out to get mantrid statistics, which may or may not require sudo access
+Mantrid - Python HTTP load balancer
 
 #### Dependencies
 
@@ -45,7 +45,7 @@ class MantridCollector(diamond.collector.Collector):
         config.update({
             'bin':              '/usr/local/bin/mantrid-client',
             'use_sudo':         False,
-            'sudo_cmd':         '/usr/bin/sudo',
+            'siiudo_cmd':       '/usr/bin/sudo',
             'path':             'mantrid'
         })
         return config
@@ -61,8 +61,8 @@ class MantridCollector(diamond.collector.Collector):
             self.log.error("%s is not executable", self.config['sudo_cmd'])
             return False
 
-        p = subprocess.Popen(self.statcommand,
-                             stdout=subprocess.PIPE).communicate()[0][:-1]
+        client = subprocess.Popen(self.statcommand,
+			stdout=subprocess.PIPE).communicate()[0][:-1]
 
         columns = {
             'open': 1,
@@ -71,13 +71,12 @@ class MantridCollector(diamond.collector.Collector):
             'outbytes': 4,
         }
 
-        for i, line in enumerate(p.split("\n")):
+        for i, line in enumerate(client.split("\n")):
             if i < 1:
                 continue
             row = line.split()
 
             host = string.replace(row[0], ".", "_")
-            host_under = string.replace(host, "-", "_")
             external = host_under
 
             for metric, column in columns.iteritems():
