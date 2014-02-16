@@ -45,7 +45,7 @@ class MantridCollector(diamond.collector.Collector):
         config.update({
             'bin':              '/usr/local/bin/mantrid-client',
             'use_sudo':         False,
-            'siiudo_cmd':       '/usr/bin/sudo',
+            'sudo_cmd':         '/usr/bin/sudo',
             'path':             'mantrid'
         })
         return config
@@ -62,7 +62,7 @@ class MantridCollector(diamond.collector.Collector):
             return False
 
         client = subprocess.Popen(self.statcommand,
-			stdout=subprocess.PIPE).communicate()[0][:-1]
+			stdout=subprocess.PIPE).communicate()
 
         columns = {
             'open': 1,
@@ -71,7 +71,7 @@ class MantridCollector(diamond.collector.Collector):
             'outbytes': 4,
         }
 
-        for i, line in enumerate(client.split("\n")):
+	for i, line in enumerate(client[0][:-1].split("\n")):
             if i < 1:
                 continue
             row = line.split()
