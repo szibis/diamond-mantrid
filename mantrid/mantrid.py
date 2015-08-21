@@ -20,8 +20,8 @@ from diamond.collector import str_to_bool
 
 class MantridCollector(diamond.collector.Collector):
 
-    def __init__(self, config, handlers):
-        super(MantridCollector, self).__init__(config, handlers)
+    def __init__(self, *args, **kwargs):
+        super(MantridCollector, self).__init__(*args, **kwargs)
 
         self.statcommand = [self.config['bin'], 'stats']
 
